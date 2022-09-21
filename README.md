@@ -11,17 +11,17 @@ This repository contains Scrooge's CPU and GPU implementations, and several eval
 └── 1. baseline_algorithms
 └── 2. scripts
 └── 3. src
-└── 4. profile #after running scripts/profile.py or scripts/download_profile.py
+└── 4. profile #after running scripts/profile.py or scripts/download_profile.sh
 └── 5. cacti #after running scripts/asic_numbers.py --cacti
-└── 6. datasets #after running scripts/download_datasets.py
+└── 6. datasets #after running scripts/download_datasets.sh
 ```
 
 1. the `baseline_algorithms` directory contains the source code of various CPU and GPU baseline tools to compare against
 2. the `scripts` directory contains various python and bash tools to automate experiments, plotting, and data download/generation
 3. The `src` directory contains the CPU and GPU code for Scrooge's alignment, testing and example components
-4. The `profile` directory contains the `.csv` results of parameter sweeps done by `scripts/profile.py`. Alternatively, our profiling results can be downloaded from Zenodo with `scripts/download_profile.py`
+4. The `profile` directory contains the `.csv` results of parameter sweeps done by `scripts/profile.py`. Alternatively, our profiling results can be downloaded from Zenodo with `scripts/download_profile.sh`
 5. The `cacti` directory contains a clone of the CACTI git repository after running `scripts/asic_numbers.py --cacti`
-6. The datasets directory contains several example datasets after running `scripts/download_datasets.py`
+6. The datasets directory contains several example datasets after running `scripts/download_datasets.sh`
 
 ## **Requirements**
 
@@ -66,7 +66,8 @@ make tests_linux
 The `tests` utility accepts any short or long read dataset as a tuple of &lt;FASTA, FASTQ, MAF/PAF&gt; files, i.e., a reference genome, a read set, and a candidate location list. This simulates the case that seeding and chaining were already executed, and the remaining pairs must be evaluated using pairwise sequence alignment. The only requirement on the dataset is that the fasta and fastq files must contain only upper- and lowercase "ACGT" characters, but no "N" (nondetermined) bases. For example, it can be invoked on one of our prepared datasets:
 
 ```bash
-python3 scripts/download_datasets.py
+./scripts/download_datasets.sh
+#python3 scripts/download_datasets.py
 ./tests --reference=./datasets/pbsim_groundtruth/reference.fasta --reads=./datasets/pbsim_groundtruth/reads.fastq  --seeds=./datasets/pbsim_groundtruth/candidates.maf
 ```
 This runs a GPU performance test by default, and produces an output in the following form:
@@ -103,7 +104,8 @@ If `NVCC_ARCH` is not set, the makefile will default to sm_86. If `nvcc` is not 
 
 Alternatively, the `profile` script automatically compiles and runs `tests` across multiple passes and algorithm configurations for a dataset. It assumes each dataset is in a separate subdirectory of `datasets` and contains a reference, read and candidate location file. The `download_datasets` script produces this file structure. For example, it can be run as follows:
 ```bash
-python3 scripts/download_datasets.py
+./scripts/download_datasets.sh
+#python3 scripts/download_datasets.py
 python3 scripts/profile.py cpu pbsim_groundtruth
 ```
 
@@ -124,24 +126,27 @@ All our prepared datasets can also be downloaded from [Zenodo](https://zenodo.or
 
 The `download_datasets` script automatically downloads and untars our prepared datasets:
 ```bash
-python3 scripts/download_datasets.py
+./scripts/download_datasets.sh
+#python3 scripts/download_datasets.py
 ```
 The gzipped datasets are 13.9GiB in total, and 63GiB when unzipped.
 
 In [DATASETS.md](DATASETS.md) we describe in detail how we prepared our datasets, and how other real and simulated datasets can be prepared.
 
- For reproducibility, we also provide the outputs we obtained from `profile.py` on [Zenodo](https://zenodo.org/record/6736836/files/scrooge_profile_results.tar.gz). The `download_profile` script automatically downloads and extracts the files:
- ```
- python3 scripts/download_profile.py
- ```
- The gzipped `profile` directory is 3.1GiB in total, and 17GiB when unzipped.
+For reproducibility, we also provide the outputs we obtained from `profile.py` on [Zenodo](https://zenodo.org/record/6736836/files/scrooge_profile_results.tar.gz). The `download_profile` script automatically downloads and extracts the files:
+```bash
+./scripts/download_profile.sh
+#python3 scripts/download_profile.py
+```
+The gzipped `profile` directory is 3.1GiB in total, and 17GiB when unzipped.
 
 ## **Plotting**
 
 The `plot` script produces several figures that analyze Scrooge's throughput and accuracy. It assumes all files in our profile results are available, i.e. should be used in conjunction with `download_profile`.
 
 ```bash
-python3 scripts/download_profile.py
+./scripts/download_datasets.sh
+#python3 scripts/download_profile.py
 python3 scripts/plot.py
 ```
 
@@ -199,7 +204,8 @@ All results from our paper can be reproduced by repeating our exact experiments 
 
 ```bash
 #download datasets
-python3 scripts/download_datasets.py
+./scripts/download_datasets.sh
+#python3 scripts/download_datasets.py
 
 #calculate ASIC area and power
 python3 ./scripts/asic_numbers.py --cacti

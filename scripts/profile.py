@@ -22,7 +22,18 @@ def run_cpu(W, O, sene, dent, early_termination, threads, reference, reads, seed
         threads = str(threads)
 
     subprocess.run(["mkdir", "-p", "baseline_algorithms/wfa/build"])
-    subprocess.run(["make", "-C", "baseline_algorithms/wfa/", "lib_wfa"], capture_output=True)
+    wfa_make_res = subprocess.run(["make", "-C", "baseline_algorithms/wfa/", "lib_wfa"], capture_output=True)
+    if wfa_make_res.returncode != 0:
+        print("*"*80)
+        print("compilation failed")
+        print(W, O, sene, dent, early_termination, threads, reference, reads, seeds)
+        print("*"*80)
+        print("stdout:")
+        print(wfa_make_res.stderr.decode())
+        print("stderr:")
+        print(wfa_make_res.stdout.decode())
+        return
+
 
     compile_base = ["g++", "-o", "cpu_baseline", "-DLIB_WFA", "-Ibaseline_algorithms/wfa", "-Lbaseline_algorithms/wfa/build", "src/cpu_baseline.cpp", "src/genasm_cpu.cpp", "src/util.cpp", "baseline_algorithms/ksw2/ksw2_extz.c", "baseline_algorithms/ksw2/ksw2_extz2_sse.c", "baseline_algorithms/edlib/edlib.cpp", "-std=c++17", "-O3", "-lpthread", "-lstdc++fs", "-lwfa", "-fopenmp"]
     compile_config = ["-DCLI_KNOBS", f"-DCLI_W={W}", f"-DCLI_K={W}", f"-DCLI_O={O}"]
@@ -35,8 +46,10 @@ def run_cpu(W, O, sene, dent, early_termination, threads, reference, reads, seed
         print("compilation failed")
         print(W, O, sene, dent, early_termination, threads, reference, reads, seeds)
         print("*"*80)
-        print(compile_res.stderr)
-        print(compile_res.stdout)
+        print("stdout:")
+        print(compile_res.stderr.decode())
+        print("stderr:")
+        print(compile_res.stdout.decode())
         return
 
     run_base = ["./cpu_baseline", "--algorithms=genasm_cpu", "--verbose"]
@@ -47,8 +60,10 @@ def run_cpu(W, O, sene, dent, early_termination, threads, reference, reads, seed
         print("run failed")
         print(W, O, sene, dent, early_termination, threads, reference, reads, seeds)
         print("*"*80)
-        print(run_res.stderr)
-        print(run_res.stdout)
+        print("stdout:")
+        print(run_res.stderr.decode())
+        print("stderr:")
+        print(run_res.stdout.decode())
         return
 
     threads = None

@@ -455,7 +455,7 @@ void read_fastq_performance_test(string path){
     for(auto it = reads.begin(); it != reads.end(); it++){
         reads_bytes += it->content.size();
     }
-    long long total_bytes = filesystem::file_size(path);
+    long long total_bytes = std::experimental::filesystem::file_size(path);
 
     long long bytes_per_second = total_bytes * 1000000000 / ns;
     cout << "read_fastq() ran at " << bytes_per_second/1000000 << "MB/s in " << ns/1000000 << "ms"<< endl;
@@ -468,7 +468,7 @@ void read_maf_performance_test(string path){
     };
     long long ns = measure_ns(workload);
 
-    long long total_bytes = filesystem::file_size(path);
+    long long total_bytes = std::experimental::filesystem::file_size(path);
     long long bytes_per_second = total_bytes * 1000000000 / ns;
     cout << "read_maf() ran at " << bytes_per_second/1000000 << "MB/s in " << ns/1000000 << "ms"<< endl;
 }

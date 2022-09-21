@@ -18,8 +18,10 @@
 #include "genasm_cpu.hpp"
 
 #ifdef LIB_WFA
+extern "C"  {
 #include "gap_affine/affine_wavefront_align.h"
 #include "gap_affine/affine_wavefront.h"
+}
 #endif
 
 using namespace std;

@@ -29,7 +29,6 @@
  * DESCRIPTION: WFA main algorithm
  */
 
-extern "C" {
 #ifndef AFFINE_WAVEFRONT_ALIGN_H_
 #define AFFINE_WAVEFRONT_ALIGN_H_
 
@@ -47,4 +46,3 @@ void affine_wavefronts_align(
     const int text_length);
 
 #endif /* AFFINE_WAVEFRONT_ALIGN_H_ */
-}
